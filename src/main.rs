@@ -1,15 +1,24 @@
 // use std::collections::HashSet;
 use std::sync::mpsc;
 use std::thread;
+use std::env;
 
 fn main() {
-    println!("Hello, world!");
-    let triangles = count_triangles(200, 200);
+    let args: Vec<String> = env::args().collect();
+    let width = &args[1].parse::<i16>().unwrap();
+    let height = &args[2].parse::<i16>().unwrap();
+    let verbose = &args[3] == "y";
+
+    println!("Starting count...");
+    let triangles = count_triangles(*width, *height);
     println!("Finished count.");
     println!("Number of triangle permutations: {}", triangles.len());
-    // for x in &triangles {
-    //     println!("{:?}", x);
-    // }
+
+    if verbose {
+        for x in &triangles {
+            println!("{:?}", x);
+        }
+    }
 }
 
 fn count_triangles_threaded(width : i16, height: i16) -> Vec<[i16; 6]> {
